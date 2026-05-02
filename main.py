@@ -52,9 +52,14 @@ def get_player_data(baller):
         for key_span in keys:
             key_name = key_span.text.strip().rstrip(':').strip()
 
-            value_span = key_span.find_next_sibling('span', class_='info-table__content info-table__content--bold')
+            value_span = key_span.find_next_sibling()
             if value_span:
-                value = value_span.getText(strip=True)
+                if key_name == "Social-Media":
+                    links = value_span.find_all('a', href=True)
+                    urls = [link['href'] for link in links]
+                    value = "\n".join(urls)
+                else:
+                    value = value_span.getText(separator=', ', strip=True)
 
                 played_data[key_name] = value
 
